@@ -1,0 +1,12 @@
+﻿{
+    "fecha":  "2026-10-16 17:58:09",
+    "prueba_salud":  {
+                         "status":  "ok",
+                         "model_loaded":  true
+                     },
+    "prueba_prediccion":  {
+                              "prediction":  0,
+                              "probability_class_0":  0.6094,
+                              "probability_class_1":  0.3906
+                          }
+}
