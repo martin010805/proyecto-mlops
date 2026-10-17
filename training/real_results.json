@@ -1,0 +1,49 @@
+{
+  "dataset": "C:\\Users\\Lenovo\\proyecto-mlops\\data\\creditcard.csv",
+  "rows_used": 30000,
+  "train_rows": 24000,
+  "test_rows": 6000,
+  "frauds_total_sample": 94,
+  "best_model": "decision_tree",
+  "best_params": {
+    "decisiontreeclassifier__criterion": "gini",
+    "decisiontreeclassifier__max_depth": 5,
+    "decisiontreeclassifier__min_samples_leaf": 10
+  },
+  "metrics": {
+    "test_auc_pr": 0.3005,
+    "test_roc_auc": 0.7495412078745411,
+    "test_precision": 0.25,
+    "test_recall": 0.5,
+    "test_f1": 0.3333333333333333,
+    "best_cv_auc_pr": 0.6488012888765264,
+    "training_seconds": 2.9952876567840576
+  },
+  "classification_report": {
+    "0": {
+      "precision": 0.999498997995992,
+      "recall": 0.9984984984984985,
+      "f1-score": 0.99899849774662,
+      "support": 5994.0
+    },
+    "1": {
+      "precision": 0.25,
+      "recall": 0.5,
+      "f1-score": 0.3333333333333333,
+      "support": 6.0
+    },
+    "accuracy": 0.998,
+    "macro avg": {
+      "precision": 0.624749498997996,
+      "recall": 0.7492492492492493,
+      "f1-score": 0.6661659155399766,
+      "support": 6000.0
+    },
+    "weighted avg": {
+      "precision": 0.9987494989979959,
+      "recall": 0.998,
+      "f1-score": 0.9983328325822067,
+      "support": 6000.0
+    }
+  }
+}
