@@ -1,31 +1,24 @@
 ﻿import os
 from pathlib import Path
-from monitoring.logger import log_prediction
 
 import mlflow
 import mlflow.sklearn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
+from monitoring.logger import log_prediction
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DATABASE_PATH = (PROJECT_ROOT / "mlflow.db").as_posix()
 
-DATABASE_PATH = PROJECT_ROOT / "mlflow.db"
-mlflow.set_tracking_uri(f"sqlite:///{DATABASE_PATH.as_posix()}")
+mlflow.set_tracking_uri(f"sqlite:///{DATABASE_PATH}")
 
-DEFAULT_MODEL_PATH = (
-    PROJECT_ROOT
-    / "mlruns"
-    / "1"
-    / "models"
-    / "m-bee73561f52d446db4f6b26fb7fbf650"
-    / "artifacts"
+MODEL_URI = os.getenv(
+    "MLFLOW_MODEL_PATH",
+    str(PROJECT_ROOT / "mlruns" / "1" / "models" / "m-f85504f3b2b3463d9baf5b850c9e98fa" / "artifacts"),
 )
 
-MODEL_PATH = Path(
-    os.getenv("MLFLOW_MODEL_PATH", str(DEFAULT_MODEL_PATH))
-)
-
-model = mlflow.sklearn.load_model(str(MODEL_PATH))
+model = mlflow.sklearn.load_model(MODEL_URI)
 
 app = FastAPI(
     title="API de Clasificación Binaria",
@@ -47,13 +40,16 @@ class PredictionInput(BaseModel):
 def home():
     return {
         "message": "API de clasificación binaria funcionando",
-        "model_path": str(MODEL_PATH),
+        "model_path": MODEL_URI,
     }
 
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "model_loaded": model is not None}
+    return {
+        "status": "ok",
+        "model_loaded": model is not None,
+    }
 
 
 @app.post("/predict")
@@ -76,6 +72,7 @@ def predict(data: PredictionInput):
             "probability_class_0": probability_class_0,
             "probability_class_1": probability_class_1,
         }
+
     except Exception as exc:
         raise HTTPException(
             status_code=500,
