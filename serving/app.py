@@ -1,5 +1,6 @@
 ﻿import os
 from pathlib import Path
+from monitoring.logger import log_prediction
 
 import mlflow
 import mlflow.sklearn
@@ -61,13 +62,24 @@ def predict(data: PredictionInput):
         prediction = int(model.predict([data.features])[0])
         probabilities = model.predict_proba([data.features])[0]
 
+        probability_class_0 = round(float(probabilities[0]), 4)
+        probability_class_1 = round(float(probabilities[1]), 4)
+
+        log_prediction(
+            prediction,
+            probability_class_0,
+            probability_class_1,
+        )
+
         return {
             "prediction": prediction,
-            "probability_class_0": round(float(probabilities[0]), 4),
-            "probability_class_1": round(float(probabilities[1]), 4),
+            "probability_class_0": probability_class_0,
+            "probability_class_1": probability_class_1,
         }
     except Exception as exc:
         raise HTTPException(
             status_code=500,
             detail=f"Error al generar la predicción: {exc}",
         ) from exc
+
+

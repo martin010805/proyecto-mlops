@@ -12,3 +12,5 @@ COPY mlruns/ ./mlruns/
 EXPOSE 8000
 
 CMD ["python", "-m", "uvicorn", "serving.app:app", "--host", "0.0.0.0", "--port", "8000"]
+
+COPY monitoring/ ./monitoring/
